@@ -22,7 +22,7 @@ export default function Portfolio() {
     return () => clearTimeout(timer)
   }, [])
 
-  const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
+  const scrollToSection = (ref: React.RefObject<HTMLDivElement | null>) => {
     ref.current?.scrollIntoView({ behavior: "smooth" })
   }
 
@@ -40,14 +40,14 @@ export default function Portfolio() {
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            JERROD LEW
+            Fajar Kurniawan
           </h1>
           <p
             className={`text-xl md:text-2xl text-gray-300 transition-all duration-1000 delay-300 ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            Content Creator
+            The Creator
           </p>
 
           <div
