@@ -8,9 +8,10 @@ interface MediaDropZoneProps {
   type: "image" | "video" | "mixed"
   title: string
   description: string
+  url?: string
 }
 
-export function MediaDropZone({ type, title, description }: MediaDropZoneProps) {
+export function MediaDropZone({ type, title, description, url }: MediaDropZoneProps) {
   const [isDragOver, setIsDragOver] = useState(false)
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
 
@@ -78,11 +79,21 @@ export function MediaDropZone({ type, title, description }: MediaDropZoneProps) 
               <div key={index} className="relative group/item h-full">
                 {file.type.startsWith("image/") ? (
                   <div className="relative h-full">
+                    <a
+                    href={url || undefined}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => {
+                      if (!url) e.preventDefault()
+                    }}
+                    className="block h-full"
+                  >
                     <img
                       src={createPreviewUrl(file) || "/placeholder.svg"}
-                      alt=""
+                      alt={title}
                       className="w-full h-full object-cover rounded-lg"
                     />
+                  </a>
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/item:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
                       <button
                         onClick={() => removeFile(index)}
@@ -94,11 +105,20 @@ export function MediaDropZone({ type, title, description }: MediaDropZoneProps) 
                   </div>
                 ) : file.type.startsWith("video/") ? (
                   <div className="relative h-full">
-                    <video
-                      src={createPreviewUrl(file)}
-                      className="w-full h-full object-cover rounded-lg"
-                      autoPlay
-                      loop
+                    <a
+                      href={url || undefined}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => {
+                        if (!url) e.preventDefault()
+                      }}
+                      className="block h-full"
+                    >
+                      <video
+                        src={createPreviewUrl(file)}
+                        className="w-full h-full object-cover rounded-lg"
+                        autoPlay
+                        loop
                       muted
                       playsInline
                       style={{
@@ -107,6 +127,7 @@ export function MediaDropZone({ type, title, description }: MediaDropZoneProps) 
                       }}
                       onContextMenu={(e) => e.preventDefault()}
                     />
+                    </a>
                     <div className="absolute inset-0 opacity-0 group-hover/item:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
                       <button
                         onClick={() => removeFile(index)}
