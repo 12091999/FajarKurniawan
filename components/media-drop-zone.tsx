@@ -5,14 +5,14 @@ import { useState, useCallback } from "react"
 import { Card } from "@/components/ui/card"
 
 interface MediaDropZoneProps {
-  type: "image" | "video" | "mixed"
+  type: "image" | "video" | "mixed" | "imageUrl"
   title: string
   description: string
   url?: string
   imageUrl: string
 }
 
-export function MediaDropZone({ type, title, description, url }: MediaDropZoneProps) {
+export function MediaDropZone({ type, title, description, url, imageUrl }: MediaDropZoneProps) {
   const [isDragOver, setIsDragOver] = useState(false)
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
 
