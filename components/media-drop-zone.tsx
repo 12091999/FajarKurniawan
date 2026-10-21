@@ -9,6 +9,7 @@ interface MediaDropZoneProps {
   title: string
   description: string
   url?: string
+  imageUrl: string
 }
 
 export function MediaDropZone({ type, title, description, url }: MediaDropZoneProps) {

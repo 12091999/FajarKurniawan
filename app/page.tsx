@@ -151,7 +151,7 @@ export default function Portfolio() {
           <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-8 fade-in-up">My Work</h2>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <MediaDropZone type="mixed" title="Content 1" description="Image or Video" url="https://sigaproduction.vercel.app/" />
+            <MediaDropZone type="mixed" title="Content 1" description="Image or Video" url="https://sigaproduction.vercel.app/" imageUrl="/content-1.png" />
             <MediaDropZone type="mixed" title="Content 2" description="Image or Video" />
             <MediaDropZone type="mixed" title="Content 3" description="Image or Video" />
             <MediaDropZone type="mixed" title="Content 4" description="Image or Video" />
