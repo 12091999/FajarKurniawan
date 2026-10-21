@@ -5,11 +5,11 @@ import { useState, useCallback } from "react"
 import { Card } from "@/components/ui/card"
 
 interface MediaDropZoneProps {
-  type: "image" | "video" | "mixed" | "imageUrl"
+  type: "image" | "video" | "mixed" 
   title: string
   description: string
   url?: string
-  imageUrl: string
+  imageUrl?: string
 }
 
 export function MediaDropZone({ type, title, description, url, imageUrl }: MediaDropZoneProps) {
@@ -63,7 +63,7 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
   return (
     <Card
       className={`relative border-2 border-dashed transition-all duration-300 cursor-pointer group ${
-        uploadedFiles.length > 0 ? "h-auto min-h-80" : "h-80"
+        uploadedFiles.length > 0 || imageUrl ? "h-auto min-h-80" : "h-80"
       } ${
         isDragOver
           ? "border-primary bg-primary/10 scale-105"
@@ -81,22 +81,23 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
                 {file.type.startsWith("image/") ? (
                   <div className="relative h-full">
                     <a
-                    href={url || undefined}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => {
-                      if (!url) e.preventDefault()
-                    }}
-                    className="block h-full"
-                  >
-                    <img
-                      src={createPreviewUrl(file) || "/placeholder.svg"}
-                      alt={title}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                  </a>
+                      href={url || undefined}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => {
+                        if (!url) e.preventDefault()
+                      }}
+                      className="block h-full"
+                    >
+                      <img
+                        src={createPreviewUrl(file)}
+                        alt={title}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                    </a>
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/item:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
                       <button
+                        type="button"
                         onClick={() => removeFile(index)}
                         className="bg-red-500/80 hover:bg-red-500 text-white px-4 py-2 rounded-full text-sm backdrop-blur-sm"
                       >
@@ -120,17 +121,18 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
                         className="w-full h-full object-cover rounded-lg"
                         autoPlay
                         loop
-                      muted
-                      playsInline
-                      style={{
-                        WebkitAppearance: "none",
-                        outline: "none",
-                      }}
-                      onContextMenu={(e) => e.preventDefault()}
-                    />
+                        muted
+                        playsInline
+                        style={{
+                          WebkitAppearance: "none",
+                          outline: "none",
+                        }}
+                        onContextMenu={(e) => e.preventDefault()}
+                      />
                     </a>
                     <div className="absolute inset-0 opacity-0 group-hover/item:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
                       <button
+                        type="button"
                         onClick={() => removeFile(index)}
                         className="bg-red-500/80 hover:bg-red-500 text-white px-4 py-2 rounded-full text-sm backdrop-blur-sm"
                       >
@@ -149,6 +151,31 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
             accept={type === "image" ? "image/*" : type === "video" ? "video/*" : "image/*,video/*"}
             onChange={handleFileInput}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+          />
+        </div>
+      ) : imageUrl ? (
+        <div className="relative h-80">
+          <a
+            href={url || undefined}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => {
+              if (!url) e.preventDefault()
+            }}
+            className="block h-full"
+          >
+            <img
+              src={imageUrl}
+              alt={title}
+              className="w-full h-full object-cover rounded-lg"
+            />
+          </a>
+          <input
+            type="file"
+            multiple
+            accept={type === "image" ? "image/*" : type === "video" ? "video/*" : "image/*,video/*"}
+            onChange={handleFileInput}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
           />
         </div>
       ) : (
@@ -198,3 +225,4 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
     </Card>
   )
 }
+  
