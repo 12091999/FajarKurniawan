@@ -156,7 +156,7 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
       ) : imageUrl ? (
         <div className="relative h-80">
           <a
-            href={url || undefined}
+            href={url}
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => {
