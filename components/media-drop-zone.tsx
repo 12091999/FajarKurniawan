@@ -146,31 +146,24 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
 
           </div>
         </div>
-      ) : imageUrl ? (
-        <div className="relative h-80">
-          <a
-            href={url || "#"}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => {
-              if (!url) e.preventDefault()
-            }}
-            className="block h-full"
-          >
-            <img
-              src={imageUrl}
-              alt={title}
-              className="w-full h-full object-cover rounded-lg"
-            />
-          </a>
-          <input
-            type="file"
-            multiple
-            accept={type === "image" ? "image/*" : type === "video" ? "video/*" : "image/*,video/*"}
-            onChange={handleFileInput}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-          />
-        </div>
+        ) : imageUrl ? (
+          <div className="relative h-80">
+            <a
+              href={url || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => {
+                if (!url) e.preventDefault()
+              }}
+              className="block h-full cursor-pointer"
+            >
+              <img
+                src={imageUrl}
+                alt={title}
+                className="w-full h-full object-cover rounded-lg"
+              />
+            </a>
+          </div>
       ) : (
         <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
           <div className="mb-3 transition-transform duration-300">
