@@ -145,14 +145,6 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
             ))}
 
           </div>
-
-          <input
-            type="file"
-            multiple
-            accept={type === "image" ? "image/*" : type === "video" ? "video/*" : "image/*,video/*"}
-            onChange={handleFileInput}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-          />
         </div>
       ) : imageUrl ? (
         <div className="relative h-80">
