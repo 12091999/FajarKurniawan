@@ -152,7 +152,7 @@ export default function Portfolio() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <MediaDropZone type="mixed" title="Content 1" description="Image or Video" url="https://sigaproduction.vercel.app/" imageUrl="/content-1.png" />
-            <MediaDropZone type="mixed" title="Content 2" description="Image or Video" />
+            <MediaDropZone type="mixed" title="Content 2" description="Image or Video" imageUrl="/content-2.png" />
             <MediaDropZone type="mixed" title="Content 3" description="Image or Video" />
             <MediaDropZone type="mixed" title="Content 4" description="Image or Video" />
           </div>
