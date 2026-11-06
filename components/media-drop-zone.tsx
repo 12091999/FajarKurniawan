@@ -78,71 +78,72 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
           <div className="grid grid-cols-1 gap-0 h-full">
             {uploadedFiles.map((file, index) => (
               <div key={index} className="relative group/item h-full">
+
                 {file.type.startsWith("image/") ? (
                   <div className="relative h-full">
+
                     <a
-                      href={url || undefined}
+                      href={url || "#"}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => {
                         if (!url) e.preventDefault()
                       }}
-                      className="block h-full"
+                      className="block h-full cursor-pointer"
                     >
                       <img
-                        src={createPreviewUrl(file)}
+                        src={URL.createObjectURL(file)}
                         alt={title}
                         className="w-full h-full object-cover rounded-lg"
                       />
                     </a>
-                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/item:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                      <button
-                        type="button"
-                        onClick={() => removeFile(index)}
-                        className="bg-red-500/80 hover:bg-red-500 text-white px-4 py-2 rounded-full text-sm backdrop-blur-sm"
-                      >
-                        Remove
-                      </button>
-                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => removeFile(index)}
+                      className="absolute top-3 right-3 z-20 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full text-sm"
+                    >
+                      Remove
+                    </button>
+
                   </div>
+
                 ) : file.type.startsWith("video/") ? (
                   <div className="relative h-full">
+
                     <a
-                      href={url || undefined}
+                      href={url || "#"}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => {
                         if (!url) e.preventDefault()
                       }}
-                      className="block h-full"
+                      className="block h-full cursor-pointer"
                     >
                       <video
-                        src={createPreviewUrl(file)}
+                        src={URL.createObjectURL(file)}
                         className="w-full h-full object-cover rounded-lg"
                         autoPlay
                         loop
                         muted
                         playsInline
-                        style={{
-                          WebkitAppearance: "none",
-                          outline: "none",
-                        }}
-                        onContextMenu={(e) => e.preventDefault()}
                       />
                     </a>
-                    <div className="absolute inset-0 opacity-0 group-hover/item:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                      <button
-                        type="button"
-                        onClick={() => removeFile(index)}
-                        className="bg-red-500/80 hover:bg-red-500 text-white px-4 py-2 rounded-full text-sm backdrop-blur-sm"
-                      >
-                        Remove
-                      </button>
-                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => removeFile(index)}
+                      className="absolute top-3 right-3 z-20 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full text-sm"
+                    >
+                      Remove
+                    </button>
+
                   </div>
                 ) : null}
+
               </div>
             ))}
+
           </div>
 
           <input
@@ -156,7 +157,7 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
       ) : imageUrl ? (
         <div className="relative h-80">
           <a
-            href={url}
+            href={url || "#"}
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => {
