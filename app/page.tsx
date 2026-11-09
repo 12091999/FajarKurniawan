@@ -154,7 +154,7 @@ export default function Portfolio() {
             <MediaDropZone type="mixed" title="Content 1" description="Image or Video" url="https://sigaproduction.vercel.app/" imageUrl="/content-1.png" />
             <MediaDropZone type="mixed" title="Content 2" description="Image or Video" url="https://wedding-organizer-three.vercel.app/" imageUrl="/content-2.png" />
             <MediaDropZone type="mixed" title="Content 3" description="Image or Video" url="https://6p9w5svn-3000.asse.devtunnels.ms/#contact" imageUrl="/content-3.png" />
-            <MediaDropZone type="mixed" title="Content 4" description="Image or Video" />
+            <MediaDropZone type="mixed" title="Content 4" description="Image or Video" url="https://6p9w5svn-3000.asse.devtunnels.ms/image" imageUrl="/content-4.png" />
           </div>
         </div>
       </section>
