@@ -151,10 +151,10 @@ export default function Portfolio() {
           <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-8 fade-in-up">My Work</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <MediaDropZone type="mixed" title="Project Screenshot" description="Latest Project" imageUrl="/Screenshot%20(16).png" />
+            <MediaDropZone type="mixed" title="Tour Guide" description="Website Project" url="https://tour-guide-rust.vercel.app/id" imageUrl="/Screenshot%20(16).png" />
             <MediaDropZone type="mixed" title="Content 2" description="Image or Video" url="https://wedding-organizer-three.vercel.app/" imageUrl="/content-2.png" />
-            <MediaDropZone type="mixed" title="Content 3" description="Image or Video" url="https://6p9w5svn-3000.asse.devtunnels.ms/#contact" imageUrl="/content-3.png" />
-            <MediaDropZone type="mixed" title="Content 4" description="Image or Video" url="https://6p9w5svn-3000.asse.devtunnels.ms/image" imageUrl="/content-4.png" />
+            <MediaDropZone type="mixed" title="Portfolio" description="Website Project" url="https://v0-creative-two.vercel.app/#contact" imageUrl="/content-3.png" />
+            <MediaDropZone type="mixed" title="Portfolio Design" description="Website Project" url="https://v0-creative-two.vercel.app/image" imageUrl="/content-4.png" />
           </div>
         </div>
       </section>
