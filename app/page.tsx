@@ -154,7 +154,7 @@ export default function Portfolio() {
             <MediaDropZone type="mixed" title="Tour Guide" description="Website Project" url="https://tour-guide-rust.vercel.app/id" imageUrl="/Screenshot%20(16).png" />
             <MediaDropZone type="mixed" title="Content 2" description="Image or Video" url="https://wedding-organizer-three.vercel.app/" imageUrl="/content-2.png" />
             <MediaDropZone type="mixed" title="Portfolio" description="Website Project" url="https://portfolio-sage-psi-32qh3imykm.vercel.app/" imageUrl="/content-3.png" />
-            <MediaDropZone type="mixed" title="Portfolio Design" description="Website Project" url="https://v0-creative-two.vercel.app/" imageUrl="/content-4.png" />
+            <MediaDropZone type="mixed" title="Portfolio Design" description="Website Project" url="https://portfolio-sage-psi-32qh3imykm.vercel.app/" imageUrl="/content-4.png" />
           </div>
         </div>
       </section>
