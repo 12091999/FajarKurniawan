@@ -33,7 +33,7 @@ export default function Portfolio() {
       <ParticleField />
 
       {/* Hero Section */}
-      <section ref={heroRef} className="min-h-screen flex flex-col items-center justify-center relative z-10 px-4">
+      <section ref={heroRef} className="min-h-[80vh] flex flex-col items-center justify-center relative z-10 px-4">
         <div className="text-center space-y-4">
           <h1
             className={`text-6xl md:text-8xl font-bold text-white transition-all duration-1000 border-0 ${
@@ -146,7 +146,7 @@ export default function Portfolio() {
         </div>
       </section>
 
-      <section ref={mediaRef} className="py-16 flex items-center justify-center relative z-10 px-4">
+      <section ref={mediaRef} className="py-8 flex items-center justify-center relative z-10 px-4">
         <div className="max-w-6xl mx-auto w-full">
           <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-8 fade-in-up">My Work</h2>
 
