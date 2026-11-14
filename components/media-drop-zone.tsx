@@ -147,7 +147,7 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
           </div>
         </div>
         ) : imageUrl ? (
-          <div className="relative h-80">
+          <div className="relative h-[28rem]">
             <a
               href={url || "#"}
               target="_blank"
@@ -160,7 +160,7 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
               <img
                 src={imageUrl}
                 alt={title}
-                className="w-full h-full object-cover rounded-lg"
+                className="w-full h-full object-contain rounded-lg bg-black/20"
               />
             </a>
           </div>
