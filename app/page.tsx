@@ -1,31 +1,14 @@
 "use client"
 
 import type React from "react"
-
-import { useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card } from "@/components/ui/card"
-import InterstellarNebula from "@/components/interstellar-nebula"
-import { ParticleField } from "@/components/particle-field"
 import { MediaDropZone } from "@/components/media-drop-zone"
 
 export default function Portfolio() {
   const contactEmail = "muhammadfajar12091999@gmail.com"
-  const [isVisible, setIsVisible] = useState(false)
-  const heroRef = useRef<HTMLDivElement>(null)
-  const mediaRef = useRef<HTMLDivElement>(null)
-  const contactRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), 500)
-    return () => clearTimeout(timer)
-  }, [])
-
-  const scrollToSection = (ref: React.RefObject<HTMLDivElement | null>) => {
-    ref.current?.scrollIntoView({ behavior: "smooth" })
-  }
 
   const handleContactSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -34,8 +17,8 @@ export default function Portfolio() {
     const name = String(formData.get("name") ?? "").trim()
     const senderEmail = String(formData.get("email") ?? "").trim()
     const message = String(formData.get("message") ?? "").trim()
-    const subject = `Permintaan jasa dari ${name}`
-    const body = `Nama: ${name}\nEmail: ${senderEmail}\n\nDetail proyek:\n${message}`
+    const subject = "Permintaan jasa dari " + name
+    const body = "Nama: " + name + "\nEmail: " + senderEmail + "\n\nDetail proyek:\n" + message
     const composeUrl = new URL("https://mail.google.com/mail/")
 
     composeUrl.searchParams.set("view", "cm")
@@ -48,186 +31,92 @@ export default function Portfolio() {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Background Effects */}
-      <InterstellarNebula />
-      <ParticleField />
+    <div className="min-h-screen bg-background text-foreground">
+      <header className="mx-auto flex max-w-6xl items-center justify-between border-b border-border px-5 py-5 md:px-8">
+        <a href="#top" className="font-semibold tracking-tight text-foreground">Fajar Kurniawan</a>
+        <nav aria-label="Navigasi utama" className="flex items-center gap-6 text-sm text-muted-foreground">
+          <a className="transition-colors hover:text-foreground" href="#projects">Proyek</a>
+          <a className="transition-colors hover:text-foreground" href="#contact">Kontak</a>
+        </nav>
+      </header>
 
-      {/* Hero Section */}
-      <section ref={heroRef} className="min-h-[80vh] flex flex-col items-center justify-center relative z-10 px-4">
-        <div className="text-center space-y-4">
-          <h1
-            className={`text-6xl md:text-8xl font-bold text-white transition-all duration-1000 border-0 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-          >
-            Fajar Kurniawan
+      <main id="top" className="mx-auto max-w-6xl px-5 md:px-8">
+        <section className="flex min-h-[68vh] flex-col justify-center py-20 md:py-28">
+          <p className="mb-5 text-sm font-medium uppercase tracking-[0.16em] text-primary">Portofolio · Web developer</p>
+          <h1 className="max-w-4xl text-5xl font-semibold leading-[1.05] tracking-tight text-foreground sm:text-6xl md:text-7xl">
+            Halo, saya Fajar.
           </h1>
-          <p
-            className={`text-xl md:text-2xl text-gray-300 transition-all duration-1000 delay-300 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-          >
-            The Creator
+          <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
+            Dari website tour guide sampai wedding organizer, saya membuat proyek dengan kebutuhan yang berbeda-beda. Di sini saya kumpulkan beberapa hasil kerja yang bisa kamu lihat langsung.
           </p>
-
-          <div
-            className={`flex items-center justify-center gap-6 mt-8 transition-all duration-1000 delay-500 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-          >
-            {/* WhatsApp */}
-            <a
-              href="https://wa.me/6281234567890"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="WhatsApp"
-              className="text-white hover:text-primary transition-colors"
-            >
-              <svg
-                className="w-6 h-6"
-                viewBox="0 0 48 48"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M24,2.5A21.52,21.52,0,0,0,5.15,34.36L2.5,45.5l11.14-2.65A21.5,21.5,0,1,0,24,2.5ZM13.25,12.27h5.86a1,1,0,0,1,1,1,10.4,10.4,0,0,0,.66,3.91,1.93,1.93,0,0,1-.66,2.44l-2.05,2a18.6,18.6,0,0,0,3.52,4.79A18.6,18.6,0,0,0,26.35,30l2-2.05c1-1,1.46-1,2.44-.66a10.4,10.4,0,0,0,3.91.66,1.05,1.05,0,0,1,1,1v5.86a1.05,1.05,0,0,1-1,1,23.68,23.68,0,0,1-15.64-6.84,23.6,23.6,0,0,1-6.84-15.64A1.07,1.07,0,0,1,13.25,12.27Z" />
-              </svg>
+          <div className="mt-9 flex flex-wrap items-center gap-5">
+            <a href="#projects" className="inline-flex items-center rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
+              Lihat proyek <span aria-hidden="true" className="ml-2">↓</span>
             </a>
-
-            {/* TikTok */}
-            <a
-              href="https://www.tiktok.com/@_fajr666_?lang=en"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="TikTok"
-              className="text-white hover:text-primary transition-colors"
-            >
-              <svg
-                className="w-6 h-6"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.332V2h-4.05v13.67a2.896 2.896 0 0 1-2.9 2.765 2.896 2.896 0 0 1-2.9-2.9 2.896 2.896 0 0 1 2.9-2.9c.302 0 .592.047.866.133V8.63a6.96 6.96 0 0 0-.866-.055A6.96 6.96 0 0 0 1.91 15.53a6.96 6.96 0 0 0 6.96 6.96 6.96 6.96 0 0 0 6.96-6.96V8.56a8.77 8.77 0 0 0 5.13 1.65V6.16a4.82 4.82 0 0 1-1.371-.204Z" />
-              </svg>
-            </a>
-
-            {/* Instagram */}
-            <a
-              href="https://www.instagram.com/fajr6_66/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-              className="text-white hover:text-primary transition-colors"
-            >
-              <svg
-                className="w-6 h-6"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2Zm0 2A3.75 3.75 0 0 0 4 7.75v8.5A3.75 3.75 0 0 0 7.75 20h8.5A3.75 3.75 0 0 0 20 16.25v-8.5A3.75 3.75 0 0 0 16.25 4h-8.5ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.25-3.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z" />
-              </svg>
-            </a>
-
-            {/* LinkedIn */}
-            <a
-              href="https://www.linkedin.com/in/fajar-kurniawan-477472443/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
-              className="text-white hover:text-primary transition-colors"
-            >
-              <svg
-                className="w-6 h-6"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.064 2.064 0 1 1 0-4.128 2.064 2.064 0 0 1 0 4.128ZM7.119 20.452H3.555V9h3.564v11.452ZM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003Z" />
-              </svg>
+            <a href="#contact" className="text-sm font-medium text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-primary">
+              Hubungi saya
             </a>
           </div>
-        </div>
+        </section>
 
-        <div
-          className={`absolute bottom-8 transition-all duration-1000 delay-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          <Button
-            variant="ghost"
-            onClick={() => scrollToSection(mediaRef)}
-            className="text-white hover:text-primary animate-bounce"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-          </Button>
-        </div>
-      </section>
-
-      <section ref={mediaRef} className="py-8 flex items-center justify-center relative z-10 px-4">
-        <div className="max-w-6xl mx-auto w-full">
-          <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-8 fade-in-up">My Work</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <MediaDropZone type="mixed" title="Tour Guide" description="Website Project" url="https://tour-guide-rust.vercel.app/id" imageUrl="/Screenshot%20(16).png" />
-            <MediaDropZone type="mixed" title="Content 2" description="Image or Video" url="https://wedding-organizer-three.vercel.app/" imageUrl="/content-2.png" />
-            <MediaDropZone type="mixed" title="Personal-resume" description="Website resume" url="https://personal-resume-hazel.vercel.app/" imageUrl="/Screenshot%20(18).png" />
-            <MediaDropZone type="mixed" title="Portfolio Design" description="Website Project" url="https://portfolio-sage-psi-32qh3imykm.vercel.app/" imageUrl="/content-4.png" />
+        <section id="projects" className="scroll-mt-8 border-t border-border py-16 md:py-20">
+          <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="mb-2 text-sm font-medium uppercase tracking-[0.14em] text-primary">Pilihan karya</p>
+              <h2 className="text-3xl font-semibold tracking-tight text-foreground">Proyek yang pernah saya kerjakan</h2>
+            </div>
+            <p className="max-w-sm text-sm leading-6 text-muted-foreground">Pilih gambar untuk melihat website secara langsung.</p>
           </div>
-        </div>
-      </section>
 
-      <section ref={contactRef} className="py-16 flex items-center justify-center relative z-10 px-4">
-        <div className="max-w-xl mx-auto w-full">
-          <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-8 fade-in-up">Contact Me</h2>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <MediaDropZone type="mixed" title="Tour Guide" description="Website" url="https://tour-guide-rust.vercel.app/id" imageUrl="/Screenshot%20(16).png" />
+            <MediaDropZone type="mixed" title="Wedding Organizer" description="Website" url="https://wedding-organizer-three.vercel.app/" imageUrl="/content-2.png" />
+            <MediaDropZone type="mixed" title="Personal Resume" description="Website" url="https://personal-resume-hazel.vercel.app/" imageUrl="/Screenshot%20(18).png" />
+            <MediaDropZone type="mixed" title="Portfolio Design" description="Website" url="https://portfolio-sage-psi-32qh3imykm.vercel.app/" imageUrl="/content-4.png" />
+          </div>
+        </section>
 
-          <Card className="bg-card/80 backdrop-blur-sm border-border p-6 opacity-80">
-            <form className="space-y-4" onSubmit={handleContactSubmit}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Input
-                    name="name"
-                    placeholder="Your name"
-                    autoComplete="name"
-                    required
-                    className="bg-input border-border text-white placeholder:text-gray-400"
-                  />
+        <section id="contact" className="scroll-mt-8 border-t border-border py-16 md:py-20">
+          <div className="mx-auto max-w-2xl">
+            <p className="mb-2 text-sm font-medium uppercase tracking-[0.14em] text-primary">Kontak</p>
+            <h2 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">Ada proyek yang ingin dibahas?</h2>
+            <p className="mt-4 max-w-xl leading-7 text-muted-foreground">Ceritakan sedikit tentang kebutuhanmu. Saya akan membalas lewat email.</p>
+
+            <Card className="mt-8 border-border bg-card p-6 shadow-sm sm:p-8">
+              <form className="space-y-5" onSubmit={handleContactSubmit}>
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                  <label className="space-y-2 text-sm font-medium text-foreground">
+                    Nama
+                    <Input name="name" placeholder="Nama kamu" autoComplete="name" required className="mt-2 border-border bg-background text-foreground placeholder:text-muted-foreground" />
+                  </label>
+                  <label className="space-y-2 text-sm font-medium text-foreground">
+                    Email
+                    <Input type="email" name="email" placeholder="nama@email.com" autoComplete="email" required className="mt-2 border-border bg-background text-foreground placeholder:text-muted-foreground" />
+                  </label>
                 </div>
-                <div>
-                  <Input
-                    type="email"
-                    name="email"
-                    placeholder="your@email.com"
-                    autoComplete="email"
-                    required
-                    className="bg-input border-border text-white placeholder:text-gray-400"
-                  />
-                </div>
-              </div>
 
-              <div>
-                <Textarea
-                  name="message"
-                  placeholder="Tell me about your project..."
-                  rows={4}
-                  required
-                  className="bg-input border-border text-white placeholder:text-gray-400 resize-none"
-                />
-              </div>
+                <label className="block space-y-2 text-sm font-medium text-foreground">
+                  Cerita tentang proyekmu
+                  <Textarea name="message" placeholder="Apa yang ingin kamu buat?" rows={5} required className="mt-2 resize-y border-border bg-background text-foreground placeholder:text-muted-foreground" />
+                </label>
 
-              <Button
-                type="submit"
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground pulse-glow"
-              >
-                Send via Gmail
-              </Button>
-            </form>
-          </Card>
-        </div>
-      </section>
+                <Button type="submit" className="rounded-full bg-primary px-5 text-primary-foreground hover:bg-primary/90">
+                  Kirim lewat Gmail
+                </Button>
+              </form>
+            </Card>
+          </div>
+        </section>
+
+        <footer className="flex flex-col gap-4 border-t border-border py-7 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+          <p>© {new Date().getFullYear()} Fajar Kurniawan</p>
+          <div className="flex gap-5">
+            <a className="transition-colors hover:text-foreground" href="https://www.linkedin.com/in/fajar-kurniawan-477472443/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a className="transition-colors hover:text-foreground" href="https://www.instagram.com/fajr6_66/" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a className="transition-colors hover:text-foreground" href="https://www.tiktok.com/@_fajr666_?lang=en" target="_blank" rel="noopener noreferrer">TikTok</a>
+          </div>
+        </footer>
+      </main>
     </div>
   )
 }

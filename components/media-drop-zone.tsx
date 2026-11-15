@@ -62,12 +62,12 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
 
   return (
     <Card
-      className={`relative border-2 border-dashed transition-all duration-300 cursor-pointer group ${
+      className={`relative transition-all duration-300 group ${
         imageUrl
-          ? "h-auto min-h-0 overflow-hidden p-0 gap-0 border-solid"
+          ? "h-auto min-h-0 cursor-pointer overflow-hidden rounded-2xl border border-border bg-card p-0 shadow-sm gap-0 hover:shadow-md"
           : uploadedFiles.length > 0
-            ? "h-auto min-h-80"
-            : "h-80"
+            ? "h-auto min-h-80 cursor-pointer border-2 border-dashed"
+            : "h-80 cursor-pointer border-2 border-dashed"
       } ${
         isDragOver
           ? "border-primary bg-primary/10 scale-105"
@@ -151,7 +151,7 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
           </div>
         </div>
         ) : imageUrl ? (
-          <div className="relative aspect-[2/1] w-full">
+          <div className="min-w-0">
             <a
               href={url || "#"}
               target="_blank"
@@ -159,13 +159,22 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
               onClick={(e) => {
                 if (!url) e.preventDefault()
               }}
-              className="block h-full cursor-pointer"
+              className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
-              <img
-                src={imageUrl}
-                alt={title}
-                className="w-full h-full object-cover"
-              />
+              <div className="relative aspect-[2/1] w-full overflow-hidden bg-muted">
+                <img
+                  src={imageUrl}
+                  alt={title + " website screenshot"}
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.015]"
+                />
+              </div>
+              <div className="flex items-center justify-between gap-4 px-5 py-4">
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{description}</p>
+                  <h3 className="mt-1 text-base font-semibold text-foreground">{title}</h3>
+                </div>
+                <span aria-hidden="true" className="text-lg text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">↗</span>
+              </div>
             </a>
           </div>
       ) : (
