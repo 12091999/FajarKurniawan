@@ -36,8 +36,15 @@ export default function Portfolio() {
     const message = String(formData.get("message") ?? "").trim()
     const subject = `Permintaan jasa dari ${name}`
     const body = `Nama: ${name}\nEmail: ${senderEmail}\n\nDetail proyek:\n${message}`
+    const composeUrl = new URL("https://mail.google.com/mail/")
 
-    window.location.href = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    composeUrl.searchParams.set("view", "cm")
+    composeUrl.searchParams.set("fs", "1")
+    composeUrl.searchParams.set("to", contactEmail)
+    composeUrl.searchParams.set("su", subject)
+    composeUrl.searchParams.set("body", body)
+
+    window.location.href = composeUrl.toString()
   }
 
   return (
@@ -215,8 +222,15 @@ export default function Portfolio() {
                 type="submit"
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground pulse-glow"
               >
-                Send Message
+                Send via Gmail
               </Button>
+              <p className="text-center text-sm text-muted-foreground">
+                Gmail akan terbuka dengan pesan siap dikirim. Atau email langsung ke{" "}
+                <a className="text-primary underline underline-offset-4" href={`mailto:${contactEmail}`}>
+                  {contactEmail}
+                </a>
+                .
+              </p>
             </form>
           </Card>
         </div>
