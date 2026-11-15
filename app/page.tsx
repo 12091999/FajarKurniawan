@@ -12,6 +12,7 @@ import { ParticleField } from "@/components/particle-field"
 import { MediaDropZone } from "@/components/media-drop-zone"
 
 export default function Portfolio() {
+  const contactEmail = "muhammadfajar12091999@gmail.com"
   const [isVisible, setIsVisible] = useState(false)
   const heroRef = useRef<HTMLDivElement>(null)
   const mediaRef = useRef<HTMLDivElement>(null)
@@ -24,6 +25,19 @@ export default function Portfolio() {
 
   const scrollToSection = (ref: React.RefObject<HTMLDivElement | null>) => {
     ref.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  const handleContactSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    const formData = new FormData(event.currentTarget)
+    const name = String(formData.get("name") ?? "").trim()
+    const senderEmail = String(formData.get("email") ?? "").trim()
+    const message = String(formData.get("message") ?? "").trim()
+    const subject = `Permintaan jasa dari ${name}`
+    const body = `Nama: ${name}\nEmail: ${senderEmail}\n\nDetail proyek:\n${message}`
+
+    window.location.href = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
   }
 
   return (
@@ -164,18 +178,24 @@ export default function Portfolio() {
           <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-8 fade-in-up">Contact Me</h2>
 
           <Card className="bg-card/80 backdrop-blur-sm border-border p-6 opacity-80">
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleContactSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Input
+                    name="name"
                     placeholder="Your name"
+                    autoComplete="name"
+                    required
                     className="bg-input border-border text-white placeholder:text-gray-400"
                   />
                 </div>
                 <div>
                   <Input
                     type="email"
+                    name="email"
                     placeholder="your@email.com"
+                    autoComplete="email"
+                    required
                     className="bg-input border-border text-white placeholder:text-gray-400"
                   />
                 </div>
@@ -183,8 +203,10 @@ export default function Portfolio() {
 
               <div>
                 <Textarea
+                  name="message"
                   placeholder="Tell me about your project..."
                   rows={4}
+                  required
                   className="bg-input border-border text-white placeholder:text-gray-400 resize-none"
                 />
               </div>
