@@ -224,13 +224,6 @@ export default function Portfolio() {
               >
                 Send via Gmail
               </Button>
-              <p className="text-center text-sm text-muted-foreground">
-                Gmail akan terbuka dengan pesan siap dikirim. Atau email langsung ke{" "}
-                <a className="text-primary underline underline-offset-4" href={`mailto:${contactEmail}`}>
-                  {contactEmail}
-                </a>
-                .
-              </p>
             </form>
           </Card>
         </div>
