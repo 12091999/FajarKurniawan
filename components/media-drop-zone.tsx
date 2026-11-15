@@ -63,7 +63,11 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
   return (
     <Card
       className={`relative border-2 border-dashed transition-all duration-300 cursor-pointer group ${
-        uploadedFiles.length > 0 || imageUrl ? "h-auto min-h-80" : "h-80"
+        imageUrl
+          ? "h-auto min-h-0 overflow-hidden p-0 gap-0 border-solid"
+          : uploadedFiles.length > 0
+            ? "h-auto min-h-80"
+            : "h-80"
       } ${
         isDragOver
           ? "border-primary bg-primary/10 scale-105"
@@ -147,7 +151,7 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
           </div>
         </div>
         ) : imageUrl ? (
-          <div className="relative h-[28rem]">
+          <div className="relative aspect-[2/1] w-full">
             <a
               href={url || "#"}
               target="_blank"
@@ -160,7 +164,7 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
               <img
                 src={imageUrl}
                 alt={title}
-                className="w-full h-full object-contain rounded-lg bg-black/20"
+                className="w-full h-full object-cover"
               />
             </a>
           </div>
