@@ -10,9 +10,17 @@ interface MediaDropZoneProps {
   description: string
   url?: string
   imageUrl?: string
+  accent?: "violet" | "coral" | "cyan" | "lime"
 }
 
-export function MediaDropZone({ type, title, description, url, imageUrl }: MediaDropZoneProps) {
+const accentStyles = {
+  violet: { border: "border-[#b3a0ff]/40 hover:border-[#b3a0ff]/90", label: "text-[#b3a0ff]" },
+  coral: { border: "border-[#ff8d76]/40 hover:border-[#ff8d76]/90", label: "text-[#ff8d76]" },
+  cyan: { border: "border-[#66d9e8]/40 hover:border-[#66d9e8]/90", label: "text-[#66d9e8]" },
+  lime: { border: "border-[#c6f36a]/40 hover:border-[#c6f36a]/90", label: "text-[#c6f36a]" },
+}
+
+export function MediaDropZone({ type, title, description, url, imageUrl, accent = "lime" }: MediaDropZoneProps) {
   const [isDragOver, setIsDragOver] = useState(false)
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
 
@@ -64,14 +72,16 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
     <Card
       className={`relative transition-all duration-300 group ${
         imageUrl
-          ? "h-auto min-h-0 cursor-pointer overflow-hidden rounded-2xl border border-border bg-card p-0 shadow-sm gap-0 hover:shadow-md"
+          ? `h-auto min-h-0 cursor-pointer overflow-hidden rounded-2xl border bg-[#1b1d2a] p-0 shadow-sm gap-0 hover:-translate-y-1 hover:shadow-lg motion-reduce:transition-none ${accentStyles[accent].border}`
           : uploadedFiles.length > 0
             ? "h-auto min-h-80 cursor-pointer border-2 border-dashed"
             : "h-80 cursor-pointer border-2 border-dashed"
       } ${
-        isDragOver
-          ? "border-primary bg-primary/10 scale-105"
-          : "border-border bg-card/50 hover:border-primary/50 hover:bg-card/70"
+        imageUrl
+          ? ""
+          : isDragOver
+            ? "border-primary bg-primary/10 scale-105"
+            : "border-border bg-card/50 hover:border-primary/50 hover:bg-card/70"
       }`}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
@@ -161,7 +171,7 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
               }}
               className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
-              <div className="relative aspect-[2/1] w-full overflow-hidden bg-muted">
+              <div className="relative aspect-[2/1] w-full overflow-hidden bg-[#14151f]">
                 <img
                   src={imageUrl}
                   alt={title + " website screenshot"}
@@ -170,10 +180,10 @@ export function MediaDropZone({ type, title, description, url, imageUrl }: Media
               </div>
               <div className="flex items-center justify-between gap-4 px-5 py-4">
                 <div>
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{description}</p>
-                  <h3 className="mt-1 text-base font-semibold text-foreground">{title}</h3>
+                  <p className={`font-mono text-xs font-medium uppercase tracking-wide ${accentStyles[accent].label}`}>{description}</p>
+                  <h3 className="mt-1 text-base font-semibold text-white">{title}</h3>
                 </div>
-                <span aria-hidden="true" className="text-lg text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">↗</span>
+                <span aria-hidden="true" className={`text-lg transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 ${accentStyles[accent].label}`}>↗</span>
               </div>
             </a>
           </div>
