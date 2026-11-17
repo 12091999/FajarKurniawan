@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Type-check
+        run: npx tsc --noEmit
+
+      - name: Test image validation
+        run: node --experimental-strip-types --test tests/storage.test.mjs
+
+      - name: Build production app
+        run: npm run build
+
+      - name: Test public and protected routes
+        run: |
+          node node_modules/next/dist/bin/next start --hostname 127.0.0.1 --port 3107 > /tmp/next.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:3107/ >/dev/null; then
+              break
+            fi
+            sleep 2
+          done
+          APP_BASE_URL=http://127.0.0.1:3107 node --experimental-strip-types --test tests/portfolio-routes.test.mjs

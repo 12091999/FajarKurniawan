@@ -1,0 +1,62 @@
+{
+  "planHash": "0dbd57ae29083e34b17bb2e8a6cacaae779d9bb16d4da0ba14ec1b523e200588",
+  "phase": "standalone",
+  "recordedAtUtc": "2026-11-17T16:07:22.9331616Z",
+  "retryCount": 3,
+  "resetBaseline": false,
+  "complete": true,
+  "result": {
+    "setupSucceeded": true,
+    "setupDurationMs": 0,
+    "setupFailureOutput": null,
+    "assertions": [
+      {
+        "name": "tests-pass",
+        "kind": "process",
+        "verificationMethod": "test-results",
+        "passed": false,
+        "timedOut": true,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": null,
+        "outputSample": "",
+        "durationMs": 180023
+      }
+    ],
+    "executions": [
+      {
+        "source": "devServer",
+        "resolvedExecutable": "C:\\Program Files\\nodejs\\npm.CMD",
+        "args": [
+          "run",
+          "dev",
+          "--",
+          "--hostname",
+          "127.0.0.1",
+          "--port",
+          "3107"
+        ],
+        "cwd": "C:\\Users\\Fajar Kurniawan\\Documents\\Web\\Fajar_Kurniawan",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32"
+      },
+      {
+        "source": "tests-pass",
+        "resolvedExecutable": "C:\\Program Files\\nodejs\\node.EXE",
+        "args": [
+          "--experimental-strip-types",
+          "--test",
+          "tests/storage.test.mjs",
+          "tests/portfolio-routes.test.mjs"
+        ],
+        "cwd": "C:\\Users\\Fajar Kurniawan\\Documents\\Web\\Fajar_Kurniawan",
+        "env": {
+          "APP_BASE_URL": "http://127.0.0.1:3107"
+        },
+        "prependPath": [],
+        "platform": "win32"
+      }
+    ]
+  }
+}

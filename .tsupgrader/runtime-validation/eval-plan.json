@@ -1,0 +1,38 @@
+{
+  "generatedAt": "2026-11-17T22:00:00+07:00",
+  "generatedOnPlatform": "win32",
+  "projectType": "webapp",
+  "devServer": {
+    "command": "node",
+    "args": [
+      "node_modules/next/dist/bin/next",
+      "start",
+      "--hostname",
+      "127.0.0.1",
+      "--port",
+      "3107"
+    ],
+    "url": "http://127.0.0.1:3107/",
+    "readyTimeoutSeconds": 120
+  },
+  "setup": [],
+  "assertions": [
+    {
+      "name": "tests-pass",
+      "kind": "process",
+      "command": "node",
+      "args": [
+        "--experimental-strip-types",
+        "--test",
+        "tests/storage.test.mjs",
+        "tests/portfolio-routes.test.mjs"
+      ],
+      "env": {
+        "APP_BASE_URL": "http://127.0.0.1:3107"
+      },
+      "verificationMethod": "test-results",
+      "expected": "0",
+      "timeoutSeconds": 180
+    }
+  ]
+}
