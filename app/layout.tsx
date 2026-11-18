@@ -5,6 +5,9 @@ import "./globals.css"
 export const metadata: Metadata = {
   title: "Fajar Kurniawan — Web Developer",
   description: "Portfolio dan proyek website Fajar Kurniawan.",
+  verification: {
+    google: "aQFRaHUn7DvHooJL3tm2h7ZQJK8oQA3TBY5QRpSL0SI",
+  },
 }
 
 export default function RootLayout({

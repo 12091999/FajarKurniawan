@@ -1,7 +1,8 @@
 "use client"
 
 import type React from "react"
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect, useRef } from "react"
+import Image from "next/image"
 import { Card } from "@/components/ui/card"
 
 interface MediaDropZoneProps {
@@ -20,9 +21,29 @@ const accentStyles = {
   lime: { border: "border-[#c6f36a]/40 hover:border-[#c6f36a]/90", label: "text-[#c6f36a]" },
 }
 
+interface UploadedFilePreview {
+  file: File
+  previewUrl: string
+}
+
 export function MediaDropZone({ type, title, description, url, imageUrl, accent = "lime" }: MediaDropZoneProps) {
   const [isDragOver, setIsDragOver] = useState(false)
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFilePreview[]>([])
+  const previewUrls = useRef(new Set<string>())
+
+  useEffect(() => {
+    const urls = previewUrls.current
+    return () => {
+      urls.forEach((previewUrl) => URL.revokeObjectURL(previewUrl))
+      urls.clear()
+    }
+  }, [])
+
+  const createPreviews = useCallback((files: File[]) => files.map((file) => {
+    const previewUrl = URL.createObjectURL(file)
+    previewUrls.current.add(previewUrl)
+    return { file, previewUrl }
+  }), [])
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -50,23 +71,26 @@ export function MediaDropZone({ type, title, description, url, imageUrl, accent 
         }
       })
 
-      setUploadedFiles((prev) => [...prev, ...validFiles])
+      const previews = createPreviews(validFiles)
+      setUploadedFiles((prev) => [...prev, ...previews])
     },
-    [type],
+    [createPreviews, type],
   )
 
   const handleFileInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
-    setUploadedFiles((prev) => [...prev, ...files])
-  }, [])
-
-  const createPreviewUrl = useCallback((file: File) => {
-    return URL.createObjectURL(file)
-  }, [])
+    const previews = createPreviews(files)
+    setUploadedFiles((prev) => [...prev, ...previews])
+  }, [createPreviews])
 
   const removeFile = useCallback((index: number) => {
+    const removed = uploadedFiles[index]
+    if (removed) {
+      URL.revokeObjectURL(removed.previewUrl)
+      previewUrls.current.delete(removed.previewUrl)
+    }
     setUploadedFiles((prev) => prev.filter((_, i) => i !== index))
-  }, [])
+  }, [uploadedFiles])
 
   return (
     <Card
@@ -90,11 +114,11 @@ export function MediaDropZone({ type, title, description, url, imageUrl, accent 
       {uploadedFiles.length > 0 ? (
         <div className="p-0 h-full">
           <div className="grid grid-cols-1 gap-0 h-full">
-            {uploadedFiles.map((file, index) => (
-              <div key={index} className="relative group/item h-full">
+            {uploadedFiles.map(({ file, previewUrl }, index) => (
+              <div key={previewUrl} className="relative group/item h-full">
 
                 {file.type.startsWith("image/") ? (
-                  <div className="relative h-full">
+                  <div className="relative h-80 w-full">
 
                     <a
                       href={url || "#"}
@@ -105,10 +129,13 @@ export function MediaDropZone({ type, title, description, url, imageUrl, accent 
                       }}
                       className="block h-full cursor-pointer"
                     >
-                      <img
-                        src={URL.createObjectURL(file)}
+                      <Image
+                        src={previewUrl}
                         alt={title}
-                        className="w-full h-full object-cover rounded-lg"
+                        fill
+                        unoptimized
+                        sizes="(min-width: 768px) 50vw, 100vw"
+                        className="rounded-lg object-cover"
                       />
                     </a>
 
@@ -123,7 +150,7 @@ export function MediaDropZone({ type, title, description, url, imageUrl, accent 
                   </div>
 
                 ) : file.type.startsWith("video/") ? (
-                  <div className="relative h-full">
+                  <div className="relative h-80 w-full">
 
                     <a
                       href={url || "#"}
@@ -135,7 +162,7 @@ export function MediaDropZone({ type, title, description, url, imageUrl, accent 
                       className="block h-full cursor-pointer"
                     >
                       <video
-                        src={URL.createObjectURL(file)}
+                        src={previewUrl}
                         className="w-full h-full object-cover rounded-lg"
                         autoPlay
                         loop
@@ -172,10 +199,13 @@ export function MediaDropZone({ type, title, description, url, imageUrl, accent 
               className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <div className="relative aspect-[2/1] w-full overflow-hidden bg-[#14151f]">
-                <img
+                <Image
                   src={imageUrl}
                   alt={title + " website screenshot"}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.015]"
+                  fill
+                  unoptimized
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                  className="object-cover transition-transform duration-300 group-hover:scale-[1.015]"
                 />
               </div>
               <div className="flex items-center justify-between gap-4 px-5 py-4">

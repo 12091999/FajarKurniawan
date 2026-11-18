@@ -50,6 +50,15 @@ export interface PortfolioData {
   skills: Skill[]
 }
 
+export function getNextProjectSortOrder(
+  projects: readonly Pick<Project, "sort_order">[],
+) {
+  return projects.reduce(
+    (highest, project) => Math.max(highest, project.sort_order ?? -1),
+    -1,
+  ) + 1
+}
+
 export const fallbackProfile: Profile = {
   id: 1,
   full_name: "Fajar Kurniawan",

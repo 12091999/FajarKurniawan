@@ -2,9 +2,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
 
 export default function LogoutButton() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -15,7 +17,8 @@ export default function LogoutButton() {
     try {
       const { error } = await getSupabaseBrowserClient().auth.signOut();
       if (error) throw error;
-      window.location.assign("/admin/login");
+      router.replace("/admin/login");
+      router.refresh();
     } catch (error) {
       console.error("Admin sign-out failed:", error);
       setErrorMessage(

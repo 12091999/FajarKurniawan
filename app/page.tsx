@@ -2,10 +2,12 @@
 
 import { useEffect, useState, type FormEvent } from "react"
 import { ArrowDown, ArrowUpRight, Mail } from "lucide-react"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card } from "@/components/ui/card"
+import { AdminSiteActions } from "@/components/admin-site-actions"
 import { MediaDropZone } from "@/components/media-drop-zone"
 import { getSupabaseBrowserClient } from "@/lib/supabase"
 import {
@@ -158,7 +160,7 @@ export default function Portfolio() {
                 {firstName}
                 <span className="mt-2 block font-display font-normal italic tracking-[-0.055em] text-[#b3a0ff]">{lastName}<span className="text-[#ff8d76]">.</span></span>
               </h1>
-              {profile.avatar_url && <img src={profile.avatar_url} alt={`Foto ${displayName}`} className="mt-6 h-14 w-14 rounded-full border border-white/20 object-cover" />}
+              {profile.avatar_url && <Image src={profile.avatar_url} alt={`Foto ${displayName}`} width={56} height={56} unoptimized className="mt-6 h-14 w-14 rounded-full border border-white/20 object-cover" />}
               <p className="mt-8 max-w-xl text-base leading-7 text-white/65 sm:text-lg sm:leading-8">
                 {profile.bio || fallbackProfile.bio}
               </p>
@@ -172,6 +174,7 @@ export default function Portfolio() {
                 <a href="#contact" className="group inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3.5 text-sm font-medium text-white/80 transition-all duration-200 hover:-translate-y-1 hover:border-[#ff8d76]/70 hover:text-white active:translate-y-0 motion-reduce:transition-none">
                   Hubungi saya <ArrowUpRight className="h-4 w-4 text-[#ff8d76] transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1" />
                 </a>
+                <AdminSiteActions />
               </div>
 
               <div className="mt-12 flex items-center gap-3 text-xs text-white/45">
@@ -187,7 +190,9 @@ export default function Portfolio() {
                 Project 01 · Live
               </div>
               <a href={featuredProject.project_url || undefined} target={featuredProject.project_url ? "_blank" : undefined} rel={featuredProject.project_url ? "noopener noreferrer" : undefined} className="group relative block rotate-[1.5deg] overflow-hidden rounded-2xl border border-white/15 bg-[#202231] p-2 shadow-2xl transition-transform duration-300 hover:rotate-0 motion-reduce:transition-none">
-                <img src={featuredProject.image_url || "/placeholder.svg"} alt={`Screenshot proyek ${featuredProject.title}`} className="aspect-[1.65/1] w-full rounded-xl object-cover object-top transition-transform duration-500 group-hover:scale-[1.025]" />
+                <div className="relative aspect-[1.65/1] w-full overflow-hidden rounded-xl">
+                  <Image src={featuredProject.image_url || "/placeholder.svg"} alt={`Screenshot proyek ${featuredProject.title}`} fill unoptimized sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.025]" />
+                </div>
                 <div className="flex items-center justify-between px-3 py-3 sm:px-4">
                   <div>
                     <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#66d9e8]">{(featuredProject.tech_stack ?? []).slice(0, 3).join(" · ") || "Website"}</p>

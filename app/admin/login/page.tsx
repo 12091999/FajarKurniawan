@@ -1,34 +1,38 @@
 
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState, type FormEvent } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
 
 export default function AdminLoginPage() {
+  return (
+    <Suspense fallback={<LoginFallback />}>
+      <AdminLoginForm />
+    </Suspense>
+  );
+}
+
+function AdminLoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const reason = searchParams.get("error");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [notice, setNotice] = useState("");
-
-  useEffect(() => {
-    const reason = new URLSearchParams(window.location.search).get("error")
-
-    if (reason === "configuration") {
-      setNotice("Konfigurasi Supabase belum tersedia. Hubungi administrator situs.")
-    } else if (reason === "unauthorized") {
-      setNotice("Sesi berakhir atau akun ini tidak memiliki akses administrator.")
-    }
-  }, []);
+  const queryNotice =
+    reason === "configuration"
+      ? "Konfigurasi Supabase belum tersedia. Hubungi administrator situs."
+      : reason === "unauthorized"
+        ? "Sesi berakhir atau akun ini tidak memiliki akses administrator."
+        : "";
 
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     setError("");
-    setNotice("");
     setLoading(true);
 
     try {
@@ -89,9 +93,9 @@ export default function AdminLoginPage() {
         </div>
 
         <form onSubmit={handleLogin} className="space-y-5">
-          {notice && (
+          {queryNotice && (
             <p role="status" className="rounded-lg bg-amber-950 p-3 text-sm text-amber-200">
-              {notice}
+              {queryNotice}
             </p>
           )}
           <div>
@@ -153,6 +157,17 @@ export default function AdminLoginPage() {
         <p className="mt-6 text-center text-xs text-gray-500">
           Halaman khusus administrator.
         </p>
+      </div>
+    </main>
+  );
+}
+
+function LoginFallback() {
+  return (
+    <main className="min-h-screen flex items-center justify-center bg-gray-950 px-4">
+      <div className="w-full max-w-md rounded-2xl border border-gray-800 bg-gray-900 p-8 shadow-xl">
+        <h1 className="text-center text-3xl font-bold text-white">Admin Login</h1>
+        <p className="mt-2 text-center text-gray-400">FajarKurniawan Portfolio</p>
       </div>
     </main>
   );

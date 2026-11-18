@@ -2,13 +2,22 @@
 
 import { useEffect, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react"
 import { ArrowUpRight, ImagePlus, Mail, Pencil, Trash2 } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
 import { getSupabaseBrowserClient } from "@/lib/supabase"
 import {
   uploadPortfolioImage,
   removePortfolioImage,
   validatePortfolioImage,
 } from "@/lib/storage"
-import type { Message, PortfolioData, Profile, Project, Skill } from "@/lib/portfolio"
+import {
+  getNextProjectSortOrder,
+  type Message,
+  type PortfolioData,
+  type Profile,
+  type Project,
+  type Skill,
+} from "@/lib/portfolio"
 import LogoutButton from "./logout-button"
 
 type DashboardTab = "profile" | "projects" | "skills" | "messages"
@@ -26,7 +35,9 @@ const emptyProfile: Profile = {
   updated_at: null,
 }
 
-const emptyProject = (): Omit<Project, "id" | "created_at" | "updated_at"> => ({
+const emptyProject = (
+  sortOrder = 0,
+): Omit<Project, "id" | "created_at" | "updated_at"> => ({
   title: "",
   slug: "",
   description: "",
@@ -35,7 +46,7 @@ const emptyProject = (): Omit<Project, "id" | "created_at" | "updated_at"> => ({
   github_url: "",
   tech_stack: [],
   featured: false,
-  sort_order: 0,
+  sort_order: sortOrder,
 })
 
 const emptySkill = (): Omit<Skill, "id" | "created_at"> => ({
@@ -73,12 +84,23 @@ export default function DashboardClient({
     initialData.profile ?? emptyProfile,
   )
   const [profileFile, setProfileFile] = useState<File | null>(null)
-  const [projectDraft, setProjectDraft] = useState(emptyProject())
+  const [profilePreviewUrl, setProfilePreviewUrl] = useState<string | null>(null)
+  const [projectDraft, setProjectDraft] = useState(() =>
+    emptyProject(getNextProjectSortOrder(initialData.projects)),
+  )
   const [editingProject, setEditingProject] = useState<Project | null>(null)
   const [projectFile, setProjectFile] = useState<File | null>(null)
+  const [projectPreviewUrl, setProjectPreviewUrl] = useState<string | null>(null)
   const [skillDraft, setSkillDraft] = useState(emptySkill())
   const [editingSkill, setEditingSkill] = useState<Skill | null>(null)
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (profilePreviewUrl) URL.revokeObjectURL(profilePreviewUrl)
+      if (projectPreviewUrl) URL.revokeObjectURL(projectPreviewUrl)
+    }
+  }, [profilePreviewUrl, projectPreviewUrl])
 
   function reportError(action: string, error: unknown) {
     console.error(`${action} failed:`, error)
@@ -91,12 +113,14 @@ export default function DashboardClient({
   function handleImageChange(
     event: ChangeEvent<HTMLInputElement>,
     setFile: (file: File | null) => void,
+    setPreviewUrl: (url: string | null) => void,
   ) {
     const file = event.target.files?.[0]
     if (!file) return
 
     try {
       validatePortfolioImage(file)
+      setPreviewUrl(URL.createObjectURL(file))
       setFile(file)
       setNotice(null)
     } catch (error) {
@@ -148,6 +172,7 @@ export default function DashboardClient({
       setData((current) => ({ ...current, profile: savedProfile as Profile }))
       setProfileDraft(savedProfile as Profile)
       setProfileFile(null)
+      setProfilePreviewUrl(null)
       setNotice({ kind: "success", text: "Profil berhasil disimpan." })
 
       if (oldImage && oldImage !== (savedProfile as Profile).avatar_url) {
@@ -173,6 +198,8 @@ export default function DashboardClient({
 
       setData((current) => ({ ...current, profile: null }))
       setProfileDraft(emptyProfile)
+      setProfileFile(null)
+      setProfilePreviewUrl(null)
       setNotice({ kind: "success", text: "Profil berhasil dihapus." })
       if (imageUrl) await removePortfolioImage(supabase, imageUrl)
     } catch (error) {
@@ -226,15 +253,23 @@ export default function DashboardClient({
 
       const savedProject = result.data as Project
       const oldImage = editingProject?.image_url
+      const nextProjects = editingProject
+        ? data.projects.map((project) =>
+            project.id === savedProject.id ? savedProject : project,
+          )
+        : [...data.projects, savedProject]
       setData((current) => ({
         ...current,
         projects: editingProject
-          ? current.projects.map((project) => project.id === savedProject.id ? savedProject : project)
+          ? current.projects.map((project) =>
+              project.id === savedProject.id ? savedProject : project,
+            )
           : [...current.projects, savedProject],
       }))
       setEditingProject(null)
-      setProjectDraft(emptyProject())
+      setProjectDraft(emptyProject(getNextProjectSortOrder(nextProjects)))
       setProjectFile(null)
+      setProjectPreviewUrl(null)
       setNotice({ kind: "success", text: editingProject ? "Project berhasil diperbarui." : "Project berhasil ditambahkan." })
 
       if (oldImage && oldImage !== savedProject.image_url) {
@@ -261,6 +296,7 @@ export default function DashboardClient({
       sort_order: project.sort_order ?? 0,
     })
     setProjectFile(null)
+    setProjectPreviewUrl(null)
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
@@ -421,13 +457,13 @@ export default function DashboardClient({
       <header className="border-b border-white/10 bg-[#10111a]">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-5 py-5 md:px-8">
           <div>
-            <a href="/" className="font-mono text-xs uppercase tracking-[0.18em] text-[#c6f36a]">FAJARKURNIAWAN</a>
+            <Link href="/" className="font-mono text-xs uppercase tracking-[0.18em] text-[#c6f36a]">FAJARKURNIAWAN</Link>
             <h1 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">Admin Dashboard</h1>
             <p className="mt-1 text-sm text-white/50">{adminEmail} · akses administrator terverifikasi</p>
           </div>
-          <a href="/" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm text-white/75 transition hover:border-[#c6f36a]/60 hover:text-white">
+          <Link href="/" className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm text-white/75 transition hover:border-[#c6f36a]/60 hover:text-white">
             Lihat website <ArrowUpRight className="h-4 w-4" />
-          </a>
+          </Link>
         </div>
       </header>
 
@@ -471,7 +507,7 @@ export default function DashboardClient({
               <TextField label="Email kontak" type="email" value={profileDraft.email ?? ""} onChange={(value) => setProfileDraft({ ...profileDraft, email: value })} maxLength={254} />
               <TextField label="Lokasi" value={profileDraft.location ?? ""} onChange={(value) => setProfileDraft({ ...profileDraft, location: value })} maxLength={160} />
               <TextField label="Website" type="url" value={profileDraft.website ?? ""} onChange={(value) => setProfileDraft({ ...profileDraft, website: value })} maxLength={2048} />
-              <ImageField label="Foto profil" currentUrl={profileDraft.avatar_url} file={profileFile} onFileChange={(event) => handleImageChange(event, setProfileFile)} onRemove={() => { setProfileFile(null); setProfileDraft({ ...profileDraft, avatar_url: "" }) }} />
+              <ImageField label="Foto profil" currentUrl={profileDraft.avatar_url} previewUrl={profilePreviewUrl} file={profileFile} onFileChange={(event) => handleImageChange(event, setProfileFile, setProfilePreviewUrl)} onRemove={() => { setProfileFile(null); setProfilePreviewUrl(null); setProfileDraft({ ...profileDraft, avatar_url: "" }) }} />
               <div className="md:col-span-2">
                 <TextField label="Bio" value={profileDraft.bio ?? ""} onChange={(value) => setProfileDraft({ ...profileDraft, bio: value })} multiline maxLength={2000} />
               </div>
@@ -491,7 +527,7 @@ export default function DashboardClient({
                 <TextField label="Judul *" value={projectDraft.title} onChange={(value) => setProjectDraft({ ...projectDraft, title: value })} required maxLength={180} />
                 <TextField label="Slug" value={projectDraft.slug ?? ""} onChange={(value) => setProjectDraft({ ...projectDraft, slug: value })} maxLength={180} />
                 <TextField label="Deskripsi" value={projectDraft.description ?? ""} onChange={(value) => setProjectDraft({ ...projectDraft, description: value })} multiline maxLength={5000} />
-                <ImageField label="Gambar project" currentUrl={projectDraft.image_url} file={projectFile} onFileChange={(event) => handleImageChange(event, setProjectFile)} onRemove={() => { setProjectFile(null); setProjectDraft({ ...projectDraft, image_url: "" }) }} />
+                <ImageField label="Gambar project" currentUrl={projectDraft.image_url} previewUrl={projectPreviewUrl} file={projectFile} onFileChange={(event) => handleImageChange(event, setProjectFile, setProjectPreviewUrl)} onRemove={() => { setProjectFile(null); setProjectPreviewUrl(null); setProjectDraft({ ...projectDraft, image_url: "" }) }} />
                 <TextField label="URL project" type="url" value={projectDraft.project_url ?? ""} onChange={(value) => setProjectDraft({ ...projectDraft, project_url: value })} maxLength={2048} />
                 <TextField label="URL GitHub" type="url" value={projectDraft.github_url ?? ""} onChange={(value) => setProjectDraft({ ...projectDraft, github_url: value })} maxLength={2048} />
                 <TextField label="Teknologi (pisahkan dengan koma)" value={(projectDraft.tech_stack ?? []).join(", ")} onChange={(value) => setProjectDraft({ ...projectDraft, tech_stack: value.split(",").map((item) => item.trim()).filter(Boolean) })} maxLength={500} />
@@ -503,14 +539,14 @@ export default function DashboardClient({
               </div>
               <div className="mt-6 flex flex-wrap gap-3">
                 <PrimaryButton disabled={saving}>{saving ? "Menyimpan..." : editingProject ? "Simpan perubahan" : "Tambah project"}</PrimaryButton>
-                {editingProject && <SecondaryButton onClick={() => { setEditingProject(null); setProjectDraft(emptyProject()); setProjectFile(null) }} disabled={saving}>Batal</SecondaryButton>}
+                {editingProject && <SecondaryButton onClick={() => { setEditingProject(null); setProjectDraft(emptyProject(getNextProjectSortOrder(data.projects))); setProjectFile(null); setProjectPreviewUrl(null) }} disabled={saving}>Batal</SecondaryButton>}
               </div>
             </form>
 
             <section className="space-y-3" aria-label="Daftar project">
               {data.projects.length === 0 ? <EmptyState title="Belum ada project" description="Tambahkan project untuk menampilkannya di portfolio publik." /> : data.projects.map((project) => (
                 <article key={project.id} className="flex gap-4 rounded-xl border border-white/10 bg-[#1b1d2a] p-4">
-                  {project.image_url ? <img src={project.image_url} alt="" className="h-20 w-24 shrink-0 rounded-lg bg-[#12141d] object-cover" /> : <div className="grid h-20 w-24 shrink-0 place-items-center rounded-lg bg-[#12141d] text-white/30"><ImagePlus className="h-6 w-6" /></div>}
+                  {project.image_url ? <Image src={project.image_url} alt="" width={96} height={80} unoptimized className="h-20 w-24 shrink-0 rounded-lg bg-[#12141d] object-cover" /> : <div className="grid h-20 w-24 shrink-0 place-items-center rounded-lg bg-[#12141d] text-white/30"><ImagePlus className="h-6 w-6" /></div>}
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="font-semibold">{project.title}</h3>
@@ -645,32 +681,23 @@ function TextField({
 function ImageField({
   label,
   currentUrl,
+  previewUrl,
   file,
   onFileChange,
   onRemove,
 }: {
   label: string
   currentUrl: string | null
+  previewUrl: string | null
   file: File | null
   onFileChange: (event: ChangeEvent<HTMLInputElement>) => void
   onRemove: () => void
 }) {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
-  useEffect(() => {
-    if (!file) {
-      setPreviewUrl(null)
-      return undefined
-    }
-    const objectUrl = URL.createObjectURL(file)
-    setPreviewUrl(objectUrl)
-    return () => URL.revokeObjectURL(objectUrl)
-  }, [file])
-
   return (
     <div className={labelClass}>
       <span>{label}</span>
       <div className="mt-2 flex flex-wrap items-center gap-4">
-        {(previewUrl || currentUrl) ? <img src={previewUrl || currentUrl || ""} alt="Pratinjau gambar" className="h-20 w-28 rounded-lg bg-[#12141d] object-cover" /> : <div className="grid h-20 w-28 place-items-center rounded-lg border border-dashed border-white/15 bg-[#12141d] text-white/30"><ImagePlus className="h-6 w-6" /></div>}
+        {(previewUrl || currentUrl) ? <Image src={previewUrl || currentUrl || ""} alt="Pratinjau gambar" width={112} height={80} unoptimized className="h-20 w-28 rounded-lg bg-[#12141d] object-cover" /> : <div className="grid h-20 w-28 place-items-center rounded-lg border border-dashed border-white/15 bg-[#12141d] text-white/30"><ImagePlus className="h-6 w-6" /></div>}
         <div className="flex flex-wrap items-center gap-2">
           <label className="cursor-pointer rounded-lg border border-white/15 px-3 py-2 text-xs text-white/75 transition hover:border-[#b3a0ff]/60">
             Pilih JPG, PNG, WebP
